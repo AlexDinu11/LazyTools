@@ -1,4 +1,7 @@
 # LazyTools
+![Version](https://img.shields.io/badge/version-v0.1.0-blue)
+![Python](https://img.shields.io/badge/python-3.8+-green)
+![License](https://img.shields.io/badge/license-MIT-yellow)
 
 > **Built out of laziness.**
 > *If I have to solve the same problem twice, it probably belongs here.*
