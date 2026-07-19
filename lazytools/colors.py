@@ -16,13 +16,35 @@ HEX_CODE = {
 }
 
 def tuple_to_list(tuple):
-    copy = tuple
-    list = []
-    for i in copy:
-        list.append(i)
-    return list
+    """
+    Convert an RGB tuple into a list.
+
+    Args:
+        value:
+            RGB tuple.
+
+    Returns:
+        A list containing the same RGB values.
+    """
+    lst = []
+    for i in tuple:
+        lst.append(i)
+    return lst
 
 def detect_type(color):
+    """
+    Detect the format of a color.
+
+    Args:
+        color:
+            The color to inspect.
+
+    Returns:
+        One of:
+            - "hex"
+            - "rgb"
+            - "tuple_rgb"
+    """
     if isinstance(color, str):
         color_type = "hex"
     elif isinstance(color, tuple):
@@ -33,6 +55,31 @@ def detect_type(color):
     return color_type
 
 def convert(current_value, target_format = "hex"):
+    """
+    Convert a color between RGB and hexadecimal formats.
+
+    Supported input formats:
+        - HEX strings ("#00bf35" or "00bf35")
+        - RGB lists ([0, 191, 53])
+        - RGB tuples ((0, 191, 53))
+
+    Args:
+        current_value:
+            The color to convert.
+        target_format:
+            The desired output format.
+            Accepted values:
+                - "hex"
+                - "rgb"
+                - "tuple_rgb"
+
+    Returns:
+        The converted color in the requested format.
+
+    Raises:
+        ValueError:
+            If the input format is invalid or unsupported.
+    """
     if target_format in ("rgb", "tuple_rgb"):
         if detect_type(current_value) == "rgb":
             return current_value
@@ -78,7 +125,31 @@ def convert(current_value, target_format = "hex"):
         return hex_color
 
 def change_color(color, value1: int, value2: int = None, value3: int  = None):
-    """Change a color either by lightening or darkening it (use 1 value) or change each RGB value of it (use at least 2 values)"""
+    """
+    Modify the RGB channels of a color.
+
+    If only `value1` is provided, the same adjustment is applied to
+    all three channels, effectively lightening or darkening the color.
+
+    If `value2` and `value3` are also provided, each RGB channel is
+    adjusted independently.
+
+    The output format matches the input format.
+
+    Args:
+        color:
+            A HEX string, RGB list, or RGB tuple.
+        value1:
+            Red channel adjustment, or the adjustment applied to all
+            channels when used alone.
+        value2:
+            Green channel adjustment.
+        value3:
+            Blue channel adjustment.
+
+    Returns:
+        The modified color in the same format as the input.
+    """
     before = color
     color_type = detect_type(color)
     color = convert(color, "rgb")
@@ -95,6 +166,25 @@ def change_color(color, value1: int, value2: int = None, value3: int  = None):
     return color
 
 def blend(color1, color2, ratio: float):
+    """
+    Blend two colors together.
+
+    The output format matches the format of the first color.
+
+    Args:
+        color1:
+            Starting color.
+        color2:
+            Ending color.
+        ratio:
+            Blend ratio.
+            Accepts values between:
+                - 0.0 and 1.0
+                - 1 and 100
+
+    Returns:
+        The blended color.
+    """
     color_type = detect_type(color1)
     color1 = convert(color1, "rgb")
     color2 = convert(color2, "rgb")
@@ -109,6 +199,23 @@ def blend(color1, color2, ratio: float):
     return color
 
 def gradient(start, end, steps):
+    """
+    Generate a gradient between two colors.
+
+    The returned colors use the same format as the first color.
+
+    Args:
+        color1:
+            Starting color.
+        color2:
+            Ending color.
+        steps:
+            Total number of colors in the gradient,
+            including both endpoints.
+
+    Returns:
+        A list containing the generated gradient.
+    """
     gradient_list = []
 
     for i in range(steps):
@@ -116,5 +223,3 @@ def gradient(start, end, steps):
         gradient_list.append(blend(start, end, ratio))
 
     return gradient_list
-
-print(detect_type((128, 256, 128)))
